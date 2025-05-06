@@ -73,8 +73,11 @@ class WiseAiEkycActivity : AppCompatActivity() {
             var status: String? = null
             if (data != null) status = data.getStringExtra("STATUS")
 
-            // 1. if error, return the error message instead of throw error
-            if (!Objects.equals(status, "CANCELLED")) {
+            // 1. if cancelled, return the cancelled code
+            if (Objects.equals(status, "CANCELLED")) {
+                WiseAiEkycPlugin.onCompleted?.let { it(Result.success("CANCELLED")) }
+            } else {
+                // 2. if error, return the error message instead of throwing error
                 WiseAiEkycPlugin.onCompleted?.let { it(Result.success(data.toString())) }
             }
 
